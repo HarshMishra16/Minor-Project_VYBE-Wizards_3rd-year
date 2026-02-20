@@ -20,5 +20,5 @@ Privacy & legal:
 - Raw audio retention must be minimized and encrypted.
 
 Contact:7410938463
-Project lead: HarshMishra16
-Industry
+Project lead: Harsh kumar Mishra
+
