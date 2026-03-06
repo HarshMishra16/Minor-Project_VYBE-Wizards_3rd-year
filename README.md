@@ -1,6 +1,6 @@
 # Minor-Project_VYBE-Wizards_3rd-year :
 
-# AI-Powered Women Safety Application
+# AI-Powered Women Safety Application.
 
 This repository contains the specification, prototypes, and deployment artifacts for an AI-powered women safety application that detects voice distress, supports NLP emergency chat, and generates concise emergency summaries.
 
