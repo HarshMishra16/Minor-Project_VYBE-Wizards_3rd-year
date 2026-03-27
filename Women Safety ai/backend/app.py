@@ -35,6 +35,37 @@ MODEL_PATH = "/Users/harshkumarmishra16/Documents/Women Safety ai/backend/distre
 
 model = tf.keras.models.load_model(MODEL_PATH)
 print("✅ Model Loaded Successfully")
+from datetime import datetime
+
+def create_ai_summary(text, lat, lon, distress_level):
+    location = f"{lat}, {lon}"
+
+    return {
+        "summary": f"User is in danger near {location}. Message: {text}. Immediate help required.",
+        "location": location,
+        "time": datetime.now().strftime("%H:%M"),
+        "distress_level": distress_level,
+        "keywords": text.lower().split()
+    }
+
+
+def send_emergency_alert(report):
+    message = f"""
+🚨 EMERGENCY ALERT
+{report['summary']}
+
+📍 Location: {report['location']}
+⚠️ Level: {report['distress_level']}
+⏰ Time: {report['time']}
+    """
+
+    client.messages.create(
+        body=message,
+        from_=twilio_number,
+        to=emergency_contact
+    )
+
+    print("🚨 ALERT SENT")
 
 
 # ===============================
@@ -252,7 +283,29 @@ def predict():
         result = "Distress Detected" if probability > 0.5 else "Normal Voice"
         print(f"🔎 Prediction: {result}  (confidence: {probability:.3f})")
 
-        return jsonify({"result": result, "confidence": probability})
+        # 🔥 Get extra data
+lat = request.form.get("lat")
+lon = request.form.get("lon")
+text = request.form.get("text", "Voice distress detected")
+
+if result == "Distress Detected":
+
+    report = create_ai_summary(text, lat, lon, "high")
+
+    send_emergency_alert(report)
+
+    return jsonify({
+        "result": result,
+        "confidence": probability,
+        "report": report,
+        "alert": "sent"
+    })
+
+else:
+    return jsonify({
+        "result": result,
+        "confidence": probability
+    })
 
     except Exception as e:
         print(f"❌ Predict error: {e}")
