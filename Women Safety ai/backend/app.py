@@ -266,57 +266,53 @@ def predict():
 
         audio_file = request.files["audio"]
 
-        # Save to a unique temp file
         filename  = f"temp_{uuid.uuid4().hex}.wav"
         temp_path = os.path.join(os.getcwd(), filename)
         audio_file.save(temp_path)
         print("🎤 Audio received")
 
-        # Extract MFCC features
         features = extract_features(temp_path)
         features = features.reshape(1, -1)
 
-        # Run model inference
         prediction  = model.predict(features)
         probability = float(prediction[0][0])
 
         result = "Distress Detected" if probability > 0.5 else "Normal Voice"
         print(f"🔎 Prediction: {result}  (confidence: {probability:.3f})")
 
-        # 🔥 Get extra data
-lat = request.form.get("lat")
-lon = request.form.get("lon")
-text = request.form.get("text", "Voice distress detected")
+        # ✅ IMPORTANT: ANDAR hona chahiye
+        lat = request.form.get("lat")
+        lon = request.form.get("lon")
+        text = request.form.get("text", "Voice distress detected")
 
-if result == "Distress Detected":
+        if result == "Distress Detected":
 
-    report = create_ai_summary(text, lat, lon, "high")
+            report = create_ai_summary(text, lat, lon, "high")
 
-    send_emergency_alert(report)
+            send_emergency_alert(report)
 
-    return jsonify({
-        "result": result,
-        "confidence": probability,
-        "report": report,
-        "alert": "sent"
-    })
+            return jsonify({
+                "result": result,
+                "confidence": probability,
+                "report": report,
+                "alert": "sent"
+            })
 
-else:
-    return jsonify({
-        "result": result,
-        "confidence": probability
-    })
+        else:
+            return jsonify({
+                "result": result,
+                "confidence": probability
+            })
 
     except Exception as e:
         print(f"❌ Predict error: {e}")
         return jsonify({"error": str(e)}), 500
 
     finally:
-        # Clean up temp audio file
         try:
             if temp_path and os.path.exists(temp_path):
                 os.remove(temp_path)
-        except Exception:
+        except:
             pass
 
 
