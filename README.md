@@ -64,11 +64,29 @@ Designed following ethical AI and privacy-first principles
 
 👨‍💻 Team
 
-Team Members:
-Harsh
-Dhananjay
-Pawan
-Mukund
+Team Members and Role :
+
+1.)Harsh Kumar Mishra (Team Lead & Full Stack AI Developer)
+a.)Led the overall project design and architecture
+b.)Developed and integrated AI models for threat detection (weapons, suspicious activity)
+c.)Built backend systems (APIs, real-time alerts, recording logic)
+d.)Worked on frontend features including SOS trigger, live camera, and UI/UX
+e.)Managed deployment, testing, and system integration
+
+2.) Dhananjay Kumar – AI/ML Engineer
+
+Assisted in training and optimizing computer vision models (YOLO/OpenCV)
+Worked on improving detection accuracy and performance
+Handled dataset preparation and preprocessing
+Contributed to real-time detection pipeline integration
+
+3.)Pawan
+
+4.) Mukund Thakur – Frontend Developer
+Designed and developed user interface using modern web technologies
+Built responsive UI for SOS alerts, live camera feed, and notifications
+Focused on user experience and accessibility
+Integrated frontend with backend APIs
 
 ⭐ Contribution
 
