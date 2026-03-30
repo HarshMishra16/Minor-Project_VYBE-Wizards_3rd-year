@@ -82,11 +82,8 @@ Contributed to real-time detection pipeline integration
 
 3.)Pawan
 
-4.) Mukund Thakur – Frontend Developer
-Designed and developed user interface using modern web technologies
-Built responsive UI for SOS alerts, live camera feed, and notifications
-Focused on user experience and accessibility
-Integrated frontend with backend APIs
+4.) Mukund Thakur 
+worked as a Full Stack Developer on the AI-powered Women Safety Application, contributing to both frontend and backend development. He designed and developed a responsive and user-friendly interface using modern web technologies, implementing features such as SOS alerts, live camera feed, and real-time notifications while ensuring strong user experience and accessibility. He also integrated the frontend with backend APIs and contributed to backend development by implementing case summary generation using LLM-based processing and handling server-side logic. Additionally, he worked on database design and management using MongoDB. The overall system was built using the MERN Stack, enabling seamless full-stack development and integration.
 
 ⭐ Contribution
 
