@@ -4,7 +4,7 @@ Minor-Project_VYBE-Wizards_3rd-year
 
 This repository contains the specifications, prototypes, and deployment artifacts for an AI-powered women safety application that detects voice distress, supports NLP-based emergency chat, and generates concise emergency summaries.
 
-🌟 Overview
+🌟 Overview : 
 
 The application is designed to provide real-time safety assistance by using AI to detect distress signals and automatically trigger emergency responses. It aims to enhance personal safety through intelligent monitoring and fast communication.
 
