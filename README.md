@@ -67,6 +67,7 @@ Designed following ethical AI and privacy-first principles
 Team Members and Role :
 
 1.)Harsh Kumar Mishra (Team Lead & Full Stack AI Developer)
+
 a.)Led the overall project design and architecture
 b.)Developed and integrated AI models for threat detection (weapons, suspicious activity)
 c.)Built backend systems (APIs, real-time alerts, recording logic)
@@ -80,7 +81,8 @@ Worked on improving detection accuracy and performance
 Handled dataset preparation and preprocessing
 Contributed to real-time detection pipeline integration
 
-3.)Pawan
+3.)Pawan Kumar 
+
 
 4.) Mukund Thakur 
 worked as a Full Stack Developer on the AI-powered Women Safety Application, contributing to both frontend and backend development. He designed and developed a responsive and user-friendly interface using modern web technologies, implementing features such as SOS alerts, live camera feed, and real-time notifications while ensuring strong user experience and accessibility. He also integrated the frontend with backend APIs and contributed to backend development by implementing case summary generation using LLM-based processing and handling server-side logic. Additionally, he worked on database design and management using MongoDB. The overall system was built using the MERN Stack, enabling seamless full-stack development and integration.
