@@ -1,253 +1,1016 @@
+/* ================================================
+   WINDOWS 2000 / MICROSOFT SYSTEM UI THEME
+   Sakti-AI — Women Safety
+   ================================================ */
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --red:      #e63950;
-      --red-glow: #ff4f68;
-      --deep:     #0d0d1a;
-      --navy:     #12122b;
-      --panel:    #181832;
-      --border:   rgba(230,57,80,0.18);
-      --glass:    rgba(255,255,255,0.04);
-      --text:     #f0eaf5;
-      --muted:    rgba(240,234,245,0.55);
-      --gold:     #f4c97e;
-      --mint:     #3de8c6;
-    }
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: var(--deep);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      cursor: none;
-    }
-    body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .35;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    }
+/* RESET */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    /* BG GLOW */
-    .bg-glow {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(230,57,80,.12) 0%, transparent 60%),
-                  radial-gradient(ellipse at 70% 50%, rgba(61,232,198,.06) 0%, transparent 55%);
-      animation: glow-shift 8s ease-in-out infinite alternate;
-    }
-    @keyframes glow-shift {
-      0%   { opacity: .7; transform: scale(1); }
-      100% { opacity: 1;  transform: scale(1.05); }
-    }
+/* WIN2K SYSTEM COLORS */
+:root {
+  --win-desktop:   #008080;        /* Classic teal desktop */
+  --win-silver:    #d4d0c8;        /* Window background */
+  --win-white:     #ffffff;
+  --win-dark:      #808080;        /* Shadow edge */
+  --win-darker:    #404040;
+  --win-black:     #000000;
+  --win-titlebar:  #000080;        /* Classic navy blue title bar */
+  --win-titletext: #ffffff;
+  --win-highlight: #0a246a;        /* Selected state */
+  --win-hitext:    #ffffff;
+  --win-btn-face:  #d4d0c8;
+  --win-btn-hi:    #ffffff;
+  --win-btn-shadow:#808080;
+  --win-btn-dark:  #404040;
+  --win-inset:     #808080;
+  --win-red:       #990000;
+  --win-link:      #0000cc;
+  --win-visited:   #800080;
+}
 
-    /* GRID */
-    .bg-grid {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background-image: linear-gradient(rgba(230,57,80,.04) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(230,57,80,.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
+/* ================================================
+   BODY — TEAL DESKTOP
+   ================================================ */
+body {
+  font-family: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+  font-size: 11px;
+  background-color: var(--win-desktop);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,0.03) 0px,
+      rgba(0,0,0,0.03) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  overflow-x: hidden;
+}
 
-    /* CURSOR */
-    #cur { width:10px; height:10px; background:var(--red); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .12s ease; }
-    #cur-ring { width:34px; height:34px; border:1.5px solid var(--red-glow); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:transform .35s cubic-bezier(.2,.9,.4,1); opacity:.55; }
+/* ================================================
+   TASKBAR
+   ================================================ */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: var(--win-silver);
+  border-top: 2px solid var(--win-btn-hi);
+  display: flex;
+  align-items: center;
+  z-index: 9999;
+  padding: 0 2px;
+  gap: 2px;
+}
 
-    /* LAYOUT */
-    .page { display: flex; min-height: 100vh; width: 100%; position: relative; z-index: 1; }
+.start-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 4px;
+  background: var(--win-silver);
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  height: 22px;
+  user-select: none;
+}
 
-    /* LEFT PANEL */
-    .left-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem;
-      border-right: 1px solid var(--border);
-      background: rgba(18,18,43,0.4);
-      backdrop-filter: blur(4px);
-      position: relative;
-      overflow: hidden;
-    }
-    .left-panel::before {
-      content: ''; position: absolute; top: -80px; right: -80px;
-      width: 320px; height: 320px;
-      background: radial-gradient(circle, rgba(230,57,80,.15), transparent 70%);
-      border-radius: 50%;
-      animation: breath 5s ease-in-out infinite;
-    }
-    @keyframes breath { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.15);opacity:1} }
+.start-btn:active {
+  border-color: var(--win-btn-dark) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-dark);
+}
 
-    .brand { display: flex; align-items: center; gap: .5rem; margin-bottom: 3rem; text-decoration: none; }
-    .brand-name { font-family:'Cormorant Garamond',serif; font-size: 2rem; font-weight: 700; color: var(--text); }
-    .brand-dot { color: var(--red); }
+.start-logo {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+}
+.start-logo span {
+  display: block;
+  border-radius: 1px;
+}
+.start-logo span:nth-child(1) { background: #ff0000; }
+.start-logo span:nth-child(2) { background: #00aa00; }
+.start-logo span:nth-child(3) { background: #0000ff; }
+.start-logo span:nth-child(4) { background: #ffaa00; }
 
-    .left-visual {
-      width: 200px; height: 200px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-      box-shadow: 0 0 60px rgba(230,57,80,.15);
-      margin-bottom: 2.5rem;
-    }
-    .left-visual::before {
-      content: ''; position: absolute; inset: -12px;
-      border-radius: 50%;
-      border: 1px dashed rgba(230,57,80,.2);
-      animation: spin 18s linear infinite;
-    }
-    .left-visual::after {
-      content: ''; position: absolute; inset: -24px;
-      border-radius: 50%;
-      border: 1px dashed rgba(230,57,80,.1);
-      animation: spin 28s linear infinite reverse;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .shield-icon { font-size: 5rem; animation: pulse-icon 2s ease-in-out infinite; }
-    @keyframes pulse-icon { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+.taskbar-divider {
+  width: 2px;
+  height: 20px;
+  border-left: 1px solid var(--win-btn-shadow);
+  border-right: 1px solid var(--win-btn-hi);
+  margin: 0 3px;
+}
 
-    .left-title { font-family:'Cormorant Garamond',serif; font-size: 2rem; font-weight: 600; text-align: center; margin-bottom: .8rem; line-height: 1.2; }
-    .left-title em { color: var(--red); font-style: italic; }
-    .left-desc { color: var(--muted); text-align: center; font-size: .9rem; line-height: 1.8; font-weight: 300; max-width: 280px; }
+.taskbar-app {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--win-silver);
+  border: 2px solid;
+  border-color: var(--win-btn-dark) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-dark);
+  font-size: 11px;
+  height: 22px;
+  min-width: 120px;
+  font-family: 'Tahoma', sans-serif;
+  cursor: default;
+  font-weight: bold;
+}
 
-    .left-stats { display: flex; gap: 1.5rem; margin-top: 2.5rem; }
-    .stat { text-align: center; }
-    .stat-num { font-family:'Cormorant Garamond',serif; font-size: 1.8rem; font-weight: 700; color: var(--red-glow); }
-    .stat-lbl { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+.taskbar-tray {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+  height: 22px;
+  border: 2px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  font-size: 11px;
+  color: var(--win-black);
+}
 
-    /* RIGHT PANEL - FORM */
-    .right-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem;
-    }
+/* ================================================
+   DESKTOP ICONS
+   ================================================ */
+.desktop-icons {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-    .form-card {
-      width: 100%;
-      max-width: 420px;
-      animation: fadeUp .7s ease both;
-    }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  width: 64px;
+  text-align: center;
+}
 
-    .form-header { margin-bottom: 2.5rem; }
-    .form-eyebrow {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(230,57,80,.1); border: 1px solid var(--border); border-radius: 50px;
-      padding: .3rem .9rem; font-size: .7rem; font-weight: 600; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--red-glow); margin-bottom: 1rem;
-    }
-    .form-title { font-family:'Cormorant Garamond',serif; font-size: 2.5rem; font-weight: 600; color: var(--text); margin-bottom: .4rem; }
-    .form-sub { color: var(--muted); font-size: .88rem; font-weight: 300; }
+.desktop-icon .icon-img {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
 
-    /* TABS */
-    .tabs { display: flex; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 4px; margin-bottom: 2rem; }
-    .tab {
-      flex: 1; padding: .6rem; text-align: center; border-radius: 10px;
-      font-size: .85rem; font-weight: 600; cursor: pointer; border: none;
-      background: transparent; color: var(--muted); font-family: 'Outfit', sans-serif;
-      transition: all .25s ease;
-    }
-    .tab.active { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(230,57,80,.35); }
+.desktop-icon .icon-label {
+  font-size: 11px;
+  color: var(--win-white);
+  text-shadow: 1px 1px 1px var(--win-black);
+  font-family: 'Tahoma', sans-serif;
+  padding: 1px 3px;
+  line-height: 1.3;
+}
 
-    /* FORM FIELDS */
-    .form-group { margin-bottom: 1.1rem; position: relative; }
-    .form-label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: .5rem; display: block; }
-    .input-wrap { position: relative; }
-    .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1rem; z-index: 2; pointer-events: none; }
-    .form-input {
-      width: 100%;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: .95rem 1rem .95rem 2.8rem;
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-size: .93rem;
-      outline: none;
-      transition: border-color .25s, box-shadow .25s, background .25s;
-    }
-    .form-input::placeholder { color: var(--muted); }
-    .form-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,57,80,.12); background: rgba(230,57,80,.03); }
-    .eye-btn { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1rem; transition: color .2s; padding: 0; }
-    .eye-btn:hover { color: var(--text); }
+.desktop-icon:hover .icon-label,
+.desktop-icon.selected .icon-label {
+  background: var(--win-highlight);
+  color: var(--win-hitext);
+  text-shadow: none;
+}
 
-    /* OPTIONS ROW */
-    .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .remember { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
-    .remember input { display: none; }
-    .cb { width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 5px; display: flex; align-items: center; justify-content: center; transition: all .2s; background: var(--panel); }
-    .remember input:checked + .cb { background: var(--red); border-color: var(--red); }
-    .remember input:checked + .cb::after { content: '✓'; font-size: .7rem; color: #fff; font-weight: 700; }
-    .remember span { font-size: .82rem; color: var(--muted); }
-    .forgot-link { font-size: .82rem; color: var(--red-glow); text-decoration: none; transition: color .2s; }
-    .forgot-link:hover { color: var(--gold); }
+/* ================================================
+   MAIN WINDOW LAYOUT
+   ================================================ */
+.page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 960px;
+  padding: 20px;
+  padding-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
 
-    /* SUBMIT */
-    .submit-btn {
-      width: 100%; padding: 1rem; border: none; border-radius: 14px;
-      background: var(--red); color: #fff;
-      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;
-      cursor: pointer; letter-spacing: .5px;
-      box-shadow: 0 6px 24px rgba(230,57,80,.35);
-      transition: all .25s; position: relative; overflow: hidden; margin-bottom: 1.2rem;
-    }
-    .submit-btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
-      transform: translateX(-100%); transition: transform .5s ease;
-    }
-    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(230,57,80,.5); }
-    .submit-btn:hover::before { transform: translateX(100%); }
+/* ================================================
+   WIN2K WINDOW CHROME
+   ================================================ */
+.win-window {
+  background: var(--win-silver);
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
 
-    /* DIVIDER */
-    .divider { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
-    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .divider span { font-size: .75rem; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.win-titlebar {
+  background: linear-gradient(to right, var(--win-titlebar) 0%, #1084d0 100%);
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 0 4px;
+  user-select: none;
+  flex-shrink: 0;
+}
 
-    /* SOCIAL */
-    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-bottom: 1.5rem; }
-    .social-btn {
-      padding: .75rem; border-radius: 12px; border: 1px solid var(--border);
-      background: var(--glass); color: var(--text); font-family: 'Outfit', sans-serif;
-      font-size: .85rem; font-weight: 500; cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: .5rem; transition: all .25s;
-    }
-    .social-btn:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); transform: translateY(-2px); }
+.win-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  overflow: hidden;
+}
 
-    .switch-text { text-align: center; font-size: .85rem; color: var(--muted); }
-    .switch-link { color: var(--red-glow); text-decoration: none; font-weight: 600; cursor: pointer; transition: color .2s; }
-    .switch-link:hover { color: var(--gold); }
+.win-titlebar-icon {
+  font-size: 13px;
+  line-height: 1;
+}
 
-    /* SIGNUP EXTRA */
-    .signup-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.win-titlebar-text {
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--win-titletext);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-    /* PASSWORD STRENGTH */
-    .strength-bar { display: flex; gap: 4px; margin-top: .5rem; }
-    .strength-seg { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.1); transition: background .3s; }
-    .strength-label { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+.win-titlebar-btns {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
 
-    /* TOAST */
-    #toast {
-      position:fixed; bottom:2rem; right:2rem; z-index:2000;
-      background:var(--panel); border:1px solid var(--border); border-radius:16px;
-      padding:1rem 1.5rem; display:flex; align-items:center; gap:.75rem;
-      font-size:.9rem; font-weight:500; color:var(--text);
-      box-shadow:0 20px 60px rgba(13,13,26,.6); max-width:340px;
-      transform:translateY(100px); opacity:0; transition:all .4s cubic-bezier(.2,.9,.4,1); overflow:hidden;
-    }
-    #toast.show { transform:translateY(0); opacity:1; }
-    .toast-bar { position:absolute; bottom:0; left:0; height:3px; background:var(--red); border-radius:0 0 16px 16px; width:100%; transform-origin:left; }
-    #toast.show .toast-bar { animation:bar-shrink 3.2s linear forwards; }
-    @keyframes bar-shrink { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+.win-chrome-btn {
+  width: 16px;
+  height: 14px;
+  background: var(--win-silver);
+  border: 1px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-family: 'Marlett', 'Tahoma', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--win-black);
+}
 
-    @media(max-width:768px){
-      .left-panel{display:none;}
-      .right-panel{padding:2rem 1.5rem;}
-      .signup-row{grid-template-columns:1fr;}
-    }
-  
+.win-chrome-btn:active {
+  border-color: var(--win-btn-dark) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-dark);
+}
+
+.win-chrome-btn.close:hover { background: #c0392b; color: white; }
+
+.win-menubar {
+  display: flex;
+  align-items: center;
+  background: var(--win-silver);
+  border-bottom: 1px solid var(--win-btn-shadow);
+  padding: 1px 2px;
+  gap: 0;
+}
+
+.win-menu-item {
+  padding: 2px 6px;
+  font-size: 11px;
+  font-family: 'Tahoma', sans-serif;
+  cursor: default;
+  color: var(--win-black);
+  text-decoration: none;
+}
+
+.win-menu-item:hover,
+.win-menu-item.active {
+  background: var(--win-highlight);
+  color: var(--win-hitext);
+}
+
+.win-content {
+  padding: 12px;
+  background: var(--win-silver);
+}
+
+/* ================================================
+   LEFT PANEL — INFO WINDOW
+   ================================================ */
+.left-panel {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-window {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-body {
+  padding: 10px;
+  background: var(--win-silver);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: var(--win-black);
+}
+
+.brand-name {
+  font-family: 'Tahoma', sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--win-black);
+}
+
+.brand-dot {
+  color: var(--win-red);
+}
+
+/* Shield icon box — raised */
+.left-visual {
+  width: 100%;
+  height: 120px;
+  background: var(--win-white);
+  border: 2px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+/* Subtle scanline effect inside the visual box */
+.left-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.03) 3px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+}
+
+.shield-icon {
+  font-size: 56px;
+  filter: drop-shadow(2px 2px 0 #999);
+}
+
+.left-title {
+  font-family: 'Tahoma', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--win-black);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.left-title em {
+  color: var(--win-red);
+  font-style: normal;
+}
+
+.left-desc {
+  font-size: 11px;
+  color: var(--win-darker);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* STATS — classic sunken groupbox */
+.left-stats {
+  border: 1px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  background: var(--win-silver);
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.stat {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-num {
+  font-family: 'Tahoma', sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--win-red);
+}
+
+.stat-lbl {
+  font-size: 9px;
+  color: var(--win-darker);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+/* Status bar at bottom of info window */
+.win-statusbar {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  background: var(--win-silver);
+  border-top: 1px solid var(--win-btn-shadow);
+  padding: 0 4px;
+  gap: 4px;
+}
+
+.statusbar-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--win-black);
+  padding: 1px 4px;
+  border: 1px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  height: 16px;
+}
+
+/* ================================================
+   RIGHT PANEL — FORM DIALOG
+   ================================================ */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  padding: 8px 12px 0;
+}
+
+.form-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--win-darker);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.form-title {
+  font-family: 'Tahoma', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--win-black);
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+
+.form-sub {
+  font-size: 11px;
+  color: var(--win-darker);
+  margin-bottom: 6px;
+}
+
+/* ================================================
+   TABS — Windows 2000 tab strip
+   ================================================ */
+.tabs {
+  display: flex;
+  padding: 0 10px;
+  border-bottom: 2px solid var(--win-btn-shadow);
+  margin-bottom: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.tab {
+  padding: 3px 14px 4px;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  cursor: default;
+  border: 1px solid;
+  border-bottom: none;
+  margin-right: 2px;
+  background: var(--win-silver);
+  color: var(--win-black);
+  border-color: var(--win-btn-hi) var(--win-btn-shadow) transparent var(--win-btn-hi);
+  position: relative;
+  bottom: -2px;
+  transition: none;
+  outline: none;
+}
+
+.tab.active {
+  background: var(--win-silver);
+  font-weight: bold;
+  border-color: var(--win-btn-hi) var(--win-btn-shadow) var(--win-silver) var(--win-btn-hi);
+  z-index: 2;
+  bottom: -2px;
+  padding-bottom: 5px;
+}
+
+.tab:not(.active):hover {
+  background: #e8e4dc;
+}
+
+/* ================================================
+   FORM CONTENT AREA
+   ================================================ */
+#loginForm,
+#signupForm {
+  padding: 10px 12px 12px;
+  background: var(--win-silver);
+}
+
+/* FORM GROUP — classic label above input */
+.form-group {
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--win-black);
+  margin-bottom: 2px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Underlined access-key style */
+.form-label u {
+  text-decoration: underline;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  z-index: 2;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* Classic win2k text input — sunken inset */
+.form-input {
+  width: 100%;
+  background: var(--win-white);
+  border: 2px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  border-radius: 0;
+  padding: 3px 20px 3px 22px;
+  color: var(--win-black);
+  font-family: 'Tahoma', 'Arial', sans-serif;
+  font-size: 11px;
+  outline: none;
+  height: 22px;
+  transition: none;
+}
+
+.form-input::placeholder {
+  color: var(--win-dark);
+  font-style: italic;
+}
+
+.form-input:focus {
+  outline: 1px dotted var(--win-black);
+  outline-offset: -3px;
+}
+
+/* Eye button */
+.eye-btn {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--win-silver);
+  border: 1px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 1px 3px;
+  height: 18px;
+  line-height: 1;
+  color: var(--win-black);
+}
+
+.eye-btn:active {
+  border-color: var(--win-btn-dark) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-dark);
+}
+
+/* ================================================
+   OPTIONS ROW
+   ================================================ */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Classic checkbox */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+}
+
+.remember input[type="checkbox"] {
+  appearance: auto;
+  -webkit-appearance: auto;
+  width: 13px;
+  height: 13px;
+  border: 2px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  background: var(--win-white);
+  cursor: default;
+  margin: 0;
+}
+
+/* Hide custom .cb, use native checkbox */
+.cb { display: none; }
+
+.remember span {
+  font-size: 11px;
+  color: var(--win-black);
+}
+
+.forgot-link {
+  font-size: 11px;
+  color: var(--win-link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.forgot-link:hover {
+  color: var(--win-red);
+}
+
+/* ================================================
+   BUTTONS — Win2K classic raised/depressed
+   ================================================ */
+.submit-btn {
+  width: 100%;
+  padding: 4px 12px;
+  height: 23px;
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  background: var(--win-silver);
+  color: var(--win-black);
+  font-family: 'Tahoma', 'Arial', sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  cursor: pointer;
+  letter-spacing: 0;
+  box-shadow: none;
+  border-radius: 0;
+  margin-bottom: 6px;
+  text-align: center;
+  position: relative;
+  transition: none;
+  overflow: visible;
+}
+
+.submit-btn:focus {
+  outline: 1px dotted var(--win-black);
+  outline-offset: -5px;
+}
+
+.submit-btn:active,
+.submit-btn:hover:active {
+  border-color: var(--win-btn-dark) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-dark);
+  padding-top: 5px;
+  padding-left: 13px;
+}
+
+/* Default action button gets a black border indicator */
+.submit-btn.primary {
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  outline: 1px solid var(--win-black);
+}
+
+/* Emergency/red button */
+.submit-btn.danger {
+  background: var(--win-silver);
+}
+
+.submit-btn.danger:hover {
+  background: #e8e4dc;
+}
+
+/* Remove shiny pseudo-elem */
+.submit-btn::before {
+  display: none;
+}
+
+/* ================================================
+   DIVIDER
+   ================================================ */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--win-btn-shadow);
+  border-bottom: 1px solid var(--win-btn-hi);
+}
+
+.divider span {
+  font-size: 10px;
+  color: var(--win-darker);
+  white-space: nowrap;
+  font-style: italic;
+}
+
+/* ================================================
+   SOCIAL BUTTONS
+   ================================================ */
+.social-btns {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.social-btn {
+  flex: 1;
+  padding: 3px 8px;
+  height: 23px;
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  background: var(--win-silver);
+  color: var(--win-black);
+  font-family: 'Tahoma', 'Arial', sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 0;
+  transform: none;
+  transition: none;
+}
+
+.social-btn:active {
+  border-color: var(--win-btn-dark) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-dark);
+}
+
+.switch-text {
+  text-align: center;
+  font-size: 11px;
+  color: var(--win-black);
+  margin-top: 4px;
+}
+
+.switch-link {
+  color: var(--win-link);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.switch-link:hover {
+  color: var(--win-red);
+}
+
+/* ================================================
+   SIGNUP FORM
+   ================================================ */
+.signup-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+/* ================================================
+   PASSWORD STRENGTH
+   ================================================ */
+.strength-bar {
+  display: flex;
+  gap: 2px;
+  margin-top: 3px;
+  height: 6px;
+  border: 1px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  background: var(--win-white);
+  padding: 1px;
+}
+
+.strength-seg {
+  flex: 1;
+  height: 100%;
+  background: var(--win-silver);
+  transition: background 0.2s;
+}
+
+.strength-label {
+  font-size: 10px;
+  color: var(--win-darker);
+  margin-top: 2px;
+}
+
+/* ================================================
+   VOICE MONITOR SECTION — GroupBox style
+   ================================================ */
+.voice-section {
+  border: 1px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  margin: 8px 0 6px;
+  padding: 10px 8px 8px;
+  position: relative;
+}
+
+.voice-section-legend {
+  position: absolute;
+  top: -7px;
+  left: 8px;
+  background: var(--win-silver);
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--win-black);
+}
+
+.voice-section-desc {
+  font-size: 10px;
+  color: var(--win-darker);
+  margin-top: 6px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.voice-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.voice-btns .submit-btn {
+  width: auto;
+  flex: 1;
+}
+
+/* ================================================
+   TOAST — Win2K balloon tooltip style
+   ================================================ */
+#toast {
+  position: fixed;
+  bottom: 36px;
+  right: 6px;
+  z-index: 10000;
+  background: var(--win-white);
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-family: 'Tahoma', sans-serif;
+  color: var(--win-black);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  max-width: 260px;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  border-radius: 0;
+  min-width: 180px;
+}
+
+#toast .toast-bar {
+  display: none;
+}
+
+#toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Win2k style notification icon indicator */
+#toast::before {
+  content: '🔔';
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ================================================
+   CURSOR — default system cursor
+   ================================================ */
+#cur,
+#cur-ring {
+  display: none;
+}
+
+/* ================================================
+   SCROLLBAR — Win2K classic
+   ================================================ */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--win-silver);
+  border: 1px solid var(--win-btn-shadow);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--win-silver);
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+}
+
+::-webkit-scrollbar-button {
+  background: var(--win-silver);
+  border: 2px solid;
+  border-color: var(--win-btn-hi) var(--win-btn-dark) var(--win-btn-dark) var(--win-btn-hi);
+  height: 16px;
+  display: block;
+}
+
+/* ================================================
+   PROGRESS BAR — classic segmented
+   ================================================ */
+.win-progress {
+  height: 14px;
+  background: var(--win-white);
+  border: 2px solid;
+  border-color: var(--win-btn-shadow) var(--win-btn-hi) var(--win-btn-hi) var(--win-btn-shadow);
+  padding: 2px;
+}
+
+.win-progress-fill {
+  height: 100%;
+  background: var(--win-highlight);
+  background: repeating-linear-gradient(
+    to right,
+    var(--win-highlight) 0px,
+    var(--win-highlight) 8px,
+    #1064a0 8px,
+    #1064a0 9px
+  );
+  transition: width 0.3s;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+@media (max-width: 700px) {
+  .left-panel { display: none; }
+  .page { padding: 10px; padding-bottom: 40px; }
+  .signup-row { grid-template-columns: 1fr; }
+}

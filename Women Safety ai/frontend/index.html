@@ -3,274 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Login — Sakti-Ai</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<title>Sakti-AI — Women Safety System</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- Custom cursor divs (hidden in Win2K mode via CSS) -->
 <div id="cur"></div>
 <div id="cur-ring"></div>
 
-<div class="bg-glow"></div>
-<div class="bg-grid"></div>
-
-<div id="toast">
-<span id="ti">✅</span>
-<span id="tm">Done</span>
-<div class="toast-bar"></div>
+<!-- ================================================
+     DESKTOP ICONS
+     ================================================ -->
+<div class="desktop-icons">
+  <div class="desktop-icon selected">
+    <div class="icon-img">🛡️</div>
+    <div class="icon-label">Sakti-AI</div>
+  </div>
+  <div class="desktop-icon">
+    <div class="icon-img">📞</div>
+    <div class="icon-label">Emergency Contacts</div>
+  </div>
+  <div class="desktop-icon">
+    <div class="icon-img">🗺️</div>
+    <div class="icon-label">My Location</div>
+  </div>
+  <div class="desktop-icon">
+    <div class="icon-img">📋</div>
+    <div class="icon-label">Safety Log</div>
+  </div>
 </div>
 
+<!-- ================================================
+     TOAST NOTIFICATION (Win2K tray balloon)
+     ================================================ -->
+<div id="toast">
+  <span id="ti"></span>
+  <span id="tm">Done</span>
+  <div class="toast-bar"></div>
+</div>
+
+<!-- ================================================
+     MAIN PAGE
+     ================================================ -->
 <div class="page">
 
-<!-- LEFT PANEL -->
-<div class="left-panel">
-
-<a class="brand" href="index.html">
-<span style="font-size:1.4rem">🚨</span>
-<span class="brand-name">Ṧά𝕜𝓽ⲓ💖<span class="brand-dot"> Women-Safety</span></span>
-</a>
-
-<div class="left-visual">
-<span class="shield-icon">🛡️</span>
-</div>
-
-<div class="left-title">
-Your Safety,<br><em>Our Promise</em>
-</div>
-
-<div class="left-desc">
-One tap to trigger an emergency alert. Real-time location sharing. Always protected.
-</div>
-
-<div class="left-stats">
-
-<div class="stat">
-<div class="stat-num">50K+</div>
-<div class="stat-lbl">Women Protected</div>
-</div>
-
-<div class="stat">
-<div class="stat-num">1M+</div>
-<div class="stat-lbl">SOS Alerts Sent</div>
-</div>
-
-<div class="stat">
-<div class="stat-num">24/7</div>
-<div class="stat-lbl">Support</div>
-</div>
-
-</div>
-</div>
-
-
-<!-- RIGHT PANEL -->
-<div class="right-panel">
-
-<div class="form-card">
-
-<div class="form-header">
-<div class="form-eyebrow">♀ Secure Access</div>
-
-<div class="form-title" id="formTitle">
-Welcome Back to 💕Ṧά𝕜𝓽ⲓ💖 secure
-</div>
-
-<div class="form-sub" id="formSub">
-Sign in to your Ṧά𝕜𝓽ⲓ💖 account
-</div>
-</div>
-
-
-<!-- TABS -->
-<div class="tabs">
-<button class="tab active" onclick="switchTab('login')">Sign In</button>
-<button class="tab" onclick="switchTab('signup')">Create Account</button>
-</div>
-
-
-
-<!-- LOGIN FORM -->
-<div id="loginForm">
-
-<div class="form-group">
-<label class="form-label">Email Address</label>
-<div class="input-wrap">
-<span class="input-icon">📧</span>
-<input type="email" class="form-input" placeholder="your@email.com" id="loginEmail">
-</div>
-</div>
-
-
-<div class="form-group">
-<label class="form-label">Password</label>
-<div class="input-wrap">
-<span class="input-icon">🔒</span>
-<input type="password" class="form-input" placeholder="Enter your password" id="loginPass" style="padding-right:3rem;">
-<button class="eye-btn" onclick="togglePass('loginPass', this)">👁️</button>
-</div>
-</div>
-
-
-<div class="form-options">
-
-<label class="remember">
-<input type="checkbox">
-<div class="cb"></div>
-<span>Remember me</span>
-</label>
-
-<a href="#" class="forgot-link">Forgot password?</a>
-
-</div>
-
-
-
-<button class="submit-btn" onclick="handleLogin()">
-Sign In Securely 🔐
-</button>
-
-
-<!-- AI VOICE DISTRESS DETECTION SECTION -->
-
-<div style="margin-top:20px;text-align:center;">
-
-<button class="submit-btn" onclick="startRecording()" style="background:#ff4b6e;">
-🎤 Start Voice Monitor
-</button>
-
-<button class="submit-btn" onclick="stopRecording()" style="margin-top:10px;">
-⏹ Stop Monitoring
-</button>
-
-<p style="margin-top:10px;font-size:0.9rem;opacity:0.8;">
-AI listens for distress voice patterns and triggers emergency alerts.
-</p>
-
-</div>
-
-
-
-<div class="divider">
-<span>or continue with</span>
-</div>
-
-
-<div class="social-btns">
-
-<button class="social-btn" onclick="toast('🔗','Google login coming soon!')">
-Google
-</button>
-
-<button class="social-btn" onclick="toast('📱','Phone login coming soon!')">
-📱 Phone
-</button>
-
-</div>
-
-<div class="switch-text">
-Don't have an account?
-<span class="switch-link" onclick="switchTab('signup')">Create one free</span>
-</div>
-
-</div>
-
-
-
-<!-- SIGNUP FORM -->
-<div id="signupForm" style="display:none;">
-
-<div class="signup-row">
-
-<div class="form-group">
-<label class="form-label">First Name</label>
-<div class="input-wrap">
-<span class="input-icon">👤</span>
-<input type="text" class="form-input" placeholder="Dhananjay">
-</div>
-</div>
-
-<div class="form-group">
-<label class="form-label">Last Name</label>
-<div class="input-wrap">
-<span class="input-icon">👤</span>
-<input type="text" class="form-input" placeholder="Kumar">
-</div>
-</div>
-
-</div>
-
-
-<div class="form-group">
-<label class="form-label">Email Address</label>
-<div class="input-wrap">
-<span class="input-icon">📧</span>
-<input type="email" class="form-input" placeholder="your@email.com">
-</div>
-</div>
-
-
-<div class="form-group">
-<label class="form-label">Phone Number</label>
-<div class="input-wrap">
-<span class="input-icon">📞</span>
-<input type="tel" class="form-input" placeholder="+917050705870">
-</div>
-</div>
-
-
-<div class="form-group">
-
-<label class="form-label">Password</label>
-
-<div class="input-wrap">
-<span class="input-icon">🔒</span>
-
-<input type="password" class="form-input"
-placeholder="Create strong password"
-id="signupPass"
-style="padding-right:3rem;"
-oninput="checkStrength(this.value)">
-
-<button class="eye-btn" onclick="togglePass('signupPass',this)">👁️</button>
-
-</div>
-
-
-<div class="strength-bar">
-<div class="strength-seg" id="s1"></div>
-<div class="strength-seg" id="s2"></div>
-<div class="strength-seg" id="s3"></div>
-<div class="strength-seg" id="s4"></div>
-</div>
-
-<div class="strength-label" id="strengthLabel">
-Enter a password
-</div>
-
-</div>
-
-
-<button class="submit-btn" onclick="handleSignup()">
-Create Account ✨
-</button>
-
-<div class="switch-text">
-Already have an account?
-<span class="switch-link" onclick="switchTab('login')">Sign in</span>
-</div>
-
-</div>
-
-</div>
-</div>
+  <!-- ============================================
+       LEFT PANEL — Info Window
+       ============================================ -->
+  <div class="left-panel">
+    <div class="win-window info-window">
+
+      <!-- Title bar -->
+      <div class="win-titlebar">
+        <div class="win-titlebar-left">
+          <span class="win-titlebar-icon">🛡️</span>
+          <span class="win-titlebar-text">Sakti-AI — Women Safety v1.0</span>
+        </div>
+        <div class="win-titlebar-btns">
+          <button class="win-chrome-btn" title="Minimize">_</button>
+          <button class="win-chrome-btn" title="Maximize">&#9633;</button>
+          <button class="win-chrome-btn close" title="Close">&#x2715;</button>
+        </div>
+      </div>
+
+      <!-- Menu bar -->
+      <div class="win-menubar">
+        <a class="win-menu-item" href="#"><u>F</u>ile</a>
+        <a class="win-menu-item" href="#"><u>V</u>iew</a>
+        <a class="win-menu-item" href="#"><u>H</u>elp</a>
+      </div>
+
+      <!-- Window body -->
+      <div class="info-body">
+
+        <a class="brand" href="index.html">
+          <span style="font-size:16px">🚨</span>
+          <span class="brand-name">Sakti-AI<span class="brand-dot"> Safety</span></span>
+        </a>
+
+        <!-- Shield visual -->
+        <div class="left-visual">
+          <span class="shield-icon">🛡️</span>
+        </div>
+
+        <div class="left-title">
+          Your Safety,<br><em>Our Promise</em>
+        </div>
+
+        <div class="left-desc">
+          One tap to trigger an emergency alert. Real-time location sharing. Always protected. AI-powered distress detection.
+        </div>
+
+        <!-- Stats group box -->
+        <div class="left-stats">
+          <div class="stat">
+            <div class="stat-num">50K+</div>
+            <div class="stat-lbl">Women Protected</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">1M+</div>
+            <div class="stat-lbl">SOS Alerts</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">24/7</div>
+            <div class="stat-lbl">Support</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Status bar -->
+      <div class="win-statusbar">
+        <div class="statusbar-item">&#127991; Protected</div>
+        <div class="statusbar-item">&#128205; GPS Active</div>
+      </div>
+
+    </div>
+  </div><!-- /left-panel -->
+
+
+  <!-- ============================================
+       RIGHT PANEL — Login Dialog
+       ============================================ -->
+  <div class="right-panel">
+    <div class="win-window form-card">
+
+      <!-- Title bar -->
+      <div class="win-titlebar">
+        <div class="win-titlebar-left">
+          <span class="win-titlebar-icon">🔐</span>
+          <span class="win-titlebar-text" id="formTitle">Sakti-AI — Secure Sign In</span>
+        </div>
+        <div class="win-titlebar-btns">
+          <button class="win-chrome-btn" title="Minimize">_</button>
+          <button class="win-chrome-btn" title="Maximize">&#9633;</button>
+          <button class="win-chrome-btn close" title="Close">&#x2715;</button>
+        </div>
+      </div>
+
+      <!-- Menu bar -->
+      <div class="win-menubar">
+        <a class="win-menu-item active" href="#"><u>A</u>ccount</a>
+        <a class="win-menu-item" href="#"><u>S</u>ecurity</a>
+        <a class="win-menu-item" href="#"><u>H</u>elp</a>
+      </div>
+
+      <!-- Form header -->
+      <div class="form-header">
+        <div class="form-eyebrow">&#9792; Secure Access Portal</div>
+        <div class="form-sub" id="formSub">Sign in to your Sakti-AI Women Safety account</div>
+      </div>
+
+      <!-- Tab strip -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- ==========================================
+           LOGIN FORM
+           ========================================== -->
+      <div id="loginForm">
+
+        <div class="form-group">
+          <label class="form-label"><u>E</u>mail Address:</label>
+          <div class="input-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-input" placeholder="your@email.com" id="loginEmail">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><u>P</u>assword:</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input" placeholder="Enter your password" id="loginPass" style="padding-right:28px;">
+            <button class="eye-btn" onclick="togglePass('loginPass', this)" title="Show/Hide">👁</button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe">
+            <div class="cb"></div>
+            <span>Remember me on this computer</span>
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button class="submit-btn primary" onclick="handleLogin()">
+          OK &nbsp;— Sign In Securely
+        </button>
+
+        <!-- Voice Monitor GroupBox -->
+        <div class="voice-section">
+          <span class="voice-section-legend">AI Voice Distress Monitor</span>
+          <div class="voice-btns">
+            <button class="submit-btn" onclick="startRecording()">
+              🎤 Start Monitor
+            </button>
+            <button class="submit-btn" onclick="stopRecording()">
+              &#9632; Stop
+            </button>
+          </div>
+          <div class="voice-section-desc">
+            AI engine listens for distress voice patterns and automatically triggers emergency SOS alerts.
+          </div>
+        </div>
+
+        <div class="divider"><span>— or continue with —</span></div>
+
+        <div class="social-btns">
+          <button class="social-btn" onclick="toast('🔗','Google login coming soon!')">
+            &#127758; Google Sign-In
+          </button>
+          <button class="social-btn" onclick="toast('📱','Phone login coming soon!')">
+            📱 Phone Number
+          </button>
+        </div>
+
+        <div class="switch-text">
+          Don't have an account? &nbsp;
+          <span class="switch-link" onclick="switchTab('signup')">Create one free &raquo;</span>
+        </div>
+
+      </div>
+
+
+      <!-- ==========================================
+           SIGNUP FORM
+           ========================================== -->
+      <div id="signupForm" style="display:none;">
+
+        <div class="signup-row">
+          <div class="form-group">
+            <label class="form-label"><u>F</u>irst Name:</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" placeholder="Priya">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><u>L</u>ast Name:</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" placeholder="Sharma">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><u>E</u>mail Address:</label>
+          <div class="input-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-input" placeholder="your@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><u>P</u>hone Number:</label>
+          <div class="input-wrap">
+            <span class="input-icon">📞</span>
+            <input type="tel" class="form-input" placeholder="+91 70507 05870">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Create <u>P</u>assword:</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input"
+              placeholder="Enter strong password"
+              id="signupPass"
+              style="padding-right:28px;"
+              oninput="checkStrength(this.value)">
+            <button class="eye-btn" onclick="togglePass('signupPass',this)" title="Show/Hide">👁</button>
+          </div>
+          <div class="strength-bar">
+            <div class="strength-seg" id="s1"></div>
+            <div class="strength-seg" id="s2"></div>
+            <div class="strength-seg" id="s3"></div>
+            <div class="strength-seg" id="s4"></div>
+          </div>
+          <div class="strength-label" id="strengthLabel">Enter a password</div>
+        </div>
+
+        <button class="submit-btn primary" onclick="handleSignup()">
+          OK &nbsp;— Create Account
+        </button>
+
+        <div class="switch-text">
+          Already have an account? &nbsp;
+          <span class="switch-link" onclick="switchTab('login')">&laquo; Back to Sign In</span>
+        </div>
+
+      </div>
+
+    </div><!-- /form-card -->
+  </div><!-- /right-panel -->
+
+</div><!-- /page -->
+
+
+<!-- ================================================
+     TASKBAR
+     ================================================ -->
+<div class="taskbar">
+  <button class="start-btn">
+    <div class="start-logo">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    Start
+  </button>
+
+  <div class="taskbar-divider"></div>
+
+  <div class="taskbar-app">
+    🛡️ Sakti-AI Safety System
+  </div>
+
+  <div class="taskbar-tray">
+    🔒 &nbsp; 🌐 &nbsp; <span id="taskbar-time">12:00</span>
+  </div>
 </div>
 
 <script src="script.js"></script>
+<script>
+  // Update taskbar clock
+  function updateClock() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2,'0');
+    const m = now.getMinutes().toString().padStart(2,'0');
+    const el = document.getElementById('taskbar-time');
+    if (el) el.textContent = h + ':' + m;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // Desktop icon selection
+  document.querySelectorAll('.desktop-icon').forEach(function(icon) {
+    icon.addEventListener('click', function() {
+      document.querySelectorAll('.desktop-icon').forEach(function(i) {
+        i.classList.remove('selected');
+      });
+      icon.classList.add('selected');
+    });
+  });
+
+  // Win2K chrome buttons
+  document.querySelectorAll('.win-chrome-btn.close').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      toast('🪟', 'Window close — use Start menu to exit');
+    });
+  });
+</script>
 
 </body>
 </html>
