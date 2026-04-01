@@ -1,0 +1,12 @@
+numpy
+scipy
+librosa
+tensorflow
+fastapi
+flask
+transformers
+scikit-learn
+pandas
+matplotlib
+pytest
+flake8
