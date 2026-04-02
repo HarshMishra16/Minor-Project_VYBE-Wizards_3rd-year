@@ -3,4 +3,5 @@ https://universe.roboflow.com/finalyrproject-ui6lv/weapon-detection-lin4o
 
 Provided by a Roboflow user
 License: CC BY 4.0
+(Roboflow, CC BY 4.0)
 
