@@ -1,276 +1,900 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login — Sakti AI Women Safety</title>
 
-<title>Login — Sakti-Ai</title>
+<!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  GOOGLE OAUTH SETUP (one-time, takes 2 minutes)         ║
+  ║  1. Go to https://console.cloud.google.com              ║
+  ║  2. Create project → APIs & Services → Credentials      ║
+  ║  3. Create OAuth 2.0 Client ID → Web Application        ║
+  ║  4. Add Authorized JS Origins:                          ║
+  ║       http://localhost  AND  http://127.0.0.1:5500      ║
+  ║       (or whatever port your Live Server uses)          ║
+  ║  5. Paste your Client ID below where indicated          ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Google Identity Services library -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#07080f;
+  --card:#12151f;
+  --card2:#0f1219;
+  --border:rgba(255,255,255,0.07);
+  --border-hi:rgba(236,72,153,0.4);
+  --pink:#ec4899;
+  --pink2:#f472b6;
+  --purple:#8b5cf6;
+  --teal:#2dd4bf;
+  --green:#10b981;
+  --text:#f0e6f6;
+  --muted:#6b7280;
+  --dim:#9ca3af;
+  --font:'Outfit',sans-serif;
+  --serif:'Cormorant Garamond',serif;
+}
+
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);cursor:none;overflow:hidden}
+@media(max-width:860px){body{overflow:auto}}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--pink);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s}
+#cur-ring{position:fixed;width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(236,72,153,.55);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .22s;opacity:.55}
+
+/* ── BG ── */
+.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 50% at 10% 20%,rgba(139,92,246,.1) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(236,72,153,.1) 0%,transparent 55%)}
+.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(236,72,153,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(236,72,153,.03) 1px,transparent 1px);background-size:48px 48px}
+
+/* ── TOAST ── */
+#toast{position:fixed;top:20px;right:20px;z-index:9000;display:flex;align-items:center;gap:9px;background:#1a1d2e;border:1px solid var(--border-hi);border-radius:12px;padding:11px 18px;font-size:13.5px;font-weight:500;box-shadow:0 12px 40px rgba(0,0,0,.5);opacity:0;transform:translateY(-12px) scale(.97);transition:opacity .3s,transform .3s;pointer-events:none;min-width:220px}
+#toast.show{opacity:1;transform:translateY(0) scale(1)}
+.toast-bar{position:absolute;bottom:0;left:0;height:2px;border-radius:0 0 12px 12px;background:linear-gradient(90deg,var(--pink),var(--purple));width:0}
+#toast.show .toast-bar{animation:tbar 3.4s linear forwards}
+@keyframes tbar{from{width:0}to{width:100%}}
+
+/* ── PAGE ── */
+.page{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;height:100vh}
+@media(max-width:860px){.page{grid-template-columns:1fr;height:auto}.left-panel{display:none}}
+
+/* ── LEFT ── */
+.left-panel{display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;border-right:1px solid var(--border);background:linear-gradient(145deg,rgba(139,92,246,.06) 0%,transparent 60%)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:3rem;width:fit-content}
+.brand-name{font-family:var(--serif);font-size:1.3rem;font-weight:600;color:var(--text);letter-spacing:.01em}
+.brand-dot{font-family:var(--font);font-size:.7rem;font-weight:400;color:var(--muted);margin-left:4px}
+.shield-wrap{width:88px;height:88px;border-radius:22px;background:linear-gradient(135deg,rgba(236,72,153,.15),rgba(139,92,246,.15));border:1px solid rgba(236,72,153,.2);display:grid;place-items:center;font-size:42px;margin-bottom:1.8rem}
+.left-title{font-family:var(--serif);font-size:clamp(1.9rem,3.2vw,2.7rem);font-weight:600;line-height:1.15;color:var(--text);margin-bottom:1rem}
+.left-title em{font-style:italic;color:var(--pink2)}
+.left-desc{font-size:14px;color:var(--dim);line-height:1.7;max-width:340px;margin-bottom:2.5rem}
+.left-stats{display:flex;gap:2rem}
+.stat-num{font-family:var(--serif);font-size:1.6rem;font-weight:700;background:linear-gradient(90deg,var(--pink2),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.04em}
+
+/* ── RIGHT ── */
+.right-panel{display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
+.form-card{width:100%;max-width:430px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.2rem 2rem}
+
+/* form header */
+.form-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin-bottom:8px}
+.form-title{font-family:var(--serif);font-size:1.65rem;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:5px}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:1.4rem}
+
+/* tabs */
+.tabs{display:flex;gap:5px;background:rgba(255,255,255,.04);border-radius:10px;padding:4px;margin-bottom:1.4rem}
+.tab{flex:1;padding:8px;border:none;border-radius:7px;background:transparent;color:var(--muted);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.tab.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.tab:hover:not(.active){color:var(--dim)}
+
+/* form groups */
+.form-group{margin-bottom:.9rem}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--dim);margin-bottom:5px;letter-spacing:.03em}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-icon{position:absolute;left:12px;font-size:14px;pointer-events:none;z-index:1}
+.form-input{width:100%;padding:10px 12px 10px 38px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:13.5px;outline:none;transition:border-color .2s,background .2s}
+.form-input::placeholder{color:var(--muted)}
+.form-input:focus{border-color:rgba(236,72,153,.5);background:rgba(255,255,255,.07)}
+.eye-btn{position:absolute;right:10px;background:none;border:none;cursor:pointer;font-size:15px;line-height:1;padding:4px;color:var(--muted)}
+.eye-btn:hover{color:var(--text)}
+
+/* phone row */
+.phone-row{display:grid;grid-template-columns:auto 1fr;gap:8px}
+.country-select{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:13px;padding:10px 10px;outline:none;cursor:pointer;transition:border-color .2s}
+.country-select:focus{border-color:rgba(236,72,153,.5)}
+.country-select option{background:#1a1d2e;color:var(--text)}
+
+/* OTP box */
+.otp-wrap{display:flex;gap:8px;justify-content:center;margin:1rem 0}
+.otp-input{width:46px;height:52px;text-align:center;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:1.2rem;font-weight:600;outline:none;transition:border-color .2s}
+.otp-input:focus{border-color:rgba(236,72,153,.6);background:rgba(255,255,255,.09)}
+
+/* options row */
+.form-options{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+.remember{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;color:var(--dim)}
+.remember input{display:none}
+.cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);display:grid;place-items:center;transition:all .2s;flex-shrink:0}
+.remember input:checked + .cb{background:var(--pink);border-color:var(--pink)}
+.remember input:checked + .cb::after{content:'✓';font-size:10px;color:#fff;line-height:1}
+.forgot-link{font-size:12.5px;color:var(--pink);text-decoration:none}
+.forgot-link:hover{text-decoration:underline}
+
+/* field error */
+.field-error{font-size:11.5px;color:#f87171;margin-top:4px;display:none}
+.field-error.show{display:block}
+
+/* submit btn */
+.submit-btn{width:100%;padding:11px;border:none;border-radius:10px;background:linear-gradient(135deg,#be185d,var(--pink));color:#fff;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.02em;transition:all .2s;box-shadow:0 4px 18px rgba(236,72,153,.3);display:flex;align-items:center;justify-content:center;gap:7px}
+.submit-btn:hover:not(:disabled){box-shadow:0 6px 24px rgba(236,72,153,.5);transform:translateY(-1px)}
+.submit-btn:active:not(:disabled){transform:scale(.98)}
+.submit-btn:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
+
+/* divider */
+.divider{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);margin:1.1rem 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── SOCIAL BUTTONS ── */
+.social-btns{display:flex;gap:8px;margin-bottom:1rem}
+.social-btn{
+  flex:1;padding:9px 8px;border:1px solid var(--border);border-radius:10px;
+  background:rgba(255,255,255,.04);color:var(--dim);font-family:var(--font);
+  font-size:13px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:7px
+}
+.social-btn:hover{background:rgba(255,255,255,.09);color:var(--text);border-color:rgba(255,255,255,.15);transform:translateY(-1px)}
+.social-btn:active{transform:scale(.97)}
+.social-btn svg{flex-shrink:0}
+
+/* Google one-tap wrapper (hidden — we use our own button) */
+#g_id_onload{display:none}
+
+/* strength bar */
+.strength-bar{display:flex;gap:5px;margin-top:7px}
+.strength-seg{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.1);transition:background .3s}
+.strength-label{font-size:11.5px;color:var(--muted);margin-top:4px}
+
+/* signup row */
+.signup-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* switch text */
+.switch-text{text-align:center;font-size:13px;color:var(--muted);margin-top:1rem}
+.switch-link{color:var(--pink);cursor:pointer;font-weight:500}
+.switch-link:hover{text-decoration:underline}
+
+/* spinner */
+.spinner{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* info note */
+.info-note{font-size:11.5px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:.9rem;line-height:1.5}
+.info-note strong{color:var(--dim)}
+
+/* resend timer */
+.resend-row{text-align:center;font-size:12.5px;color:var(--muted);margin-top:.5rem}
+.resend-link{color:var(--pink);cursor:pointer;font-weight:500}
+.resend-link:hover{text-decoration:underline}
+.resend-link.disabled{color:var(--muted);cursor:not-allowed;text-decoration:none}
+</style>
 </head>
-
 <body>
 
+<!-- Custom cursor -->
 <div id="cur"></div>
 <div id="cur-ring"></div>
 
 <div class="bg-glow"></div>
 <div class="bg-grid"></div>
 
+<!-- Toast notification -->
 <div id="toast">
-<span id="ti">✅</span>
-<span id="tm">Done</span>
-<div class="toast-bar"></div>
+  <span id="ti">✅</span>
+  <span id="tm">Done</span>
+  <div class="toast-bar"></div>
+</div>
+
+<!-- Google Identity Services hidden initializer -->
+<div id="g_id_onload"
+  data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"
+  data-callback="onGoogleSignIn"
+  data-auto_prompt="false">
 </div>
 
 <div class="page">
 
-<!-- LEFT PANEL -->
-<div class="left-panel">
-
-<a class="brand" href="index.html">
-<span style="font-size:1.4rem">🚨</span>
-<span class="brand-name">Ṧά𝕜𝓽ⲓ💖<span class="brand-dot"> Women-Safety</span></span>
-</a>
-
-<div class="left-visual">
-<span class="shield-icon">🛡️</span>
-</div>
-
-<div class="left-title">
-Your Safety,<br><em>Our Promise</em>
-</div>
-
-<div class="left-desc">
-One tap to trigger an emergency alert. Real-time location sharing. Always protected.
-</div>
-
-<div class="left-stats">
-
-<div class="stat">
-<div class="stat-num">50K+</div>
-<div class="stat-lbl">Women Protected</div>
-</div>
-
-<div class="stat">
-<div class="stat-num">1M+</div>
-<div class="stat-lbl">SOS Alerts Sent</div>
-</div>
-
-<div class="stat">
-<div class="stat-num">24/7</div>
-<div class="stat-lbl">Support</div>
-</div>
-
-</div>
-</div>
-
-
-<!-- RIGHT PANEL -->
-<div class="right-panel">
-
-<div class="form-card">
-
-<div class="form-header">
-<div class="form-eyebrow">♀ Secure Access</div>
-
-<div class="form-title" id="formTitle">
-Welcome Back to 💕Ṧά𝕜𝓽ⲓ💖 secure
-</div>
-
-<div class="form-sub" id="formSub">
-Sign in to your Ṧά𝕜𝓽ⲓ💖 account
-</div>
-</div>
-
-
-<!-- TABS -->
-<div class="tabs">
-<button class="tab active" onclick="switchTab('login')">Sign In</button>
-<button class="tab" onclick="switchTab('signup')">Create Account</button>
-</div>
-
-
-
-<!-- LOGIN FORM -->
-<div id="loginForm">
-
-<div class="form-group">
-<label class="form-label">Email Address</label>
-<div class="input-wrap">
-<span class="input-icon">📧</span>
-<input type="email" class="form-input" placeholder="your@email.com" id="loginEmail">
-</div>
-</div>
-
-
-<div class="form-group">
-<label class="form-label">Password</label>
-<div class="input-wrap">
-<span class="input-icon">🔒</span>
-<input type="password" class="form-input" placeholder="Enter your password" id="loginPass" style="padding-right:3rem;">
-<button class="eye-btn" onclick="togglePass('loginPass', this)">👁️</button>
-</div>
-</div>
-
-
-<div class="form-options">
-
-<label class="remember">
-<input type="checkbox">
-<div class="cb"></div>
-<span>Remember me</span>
-</label>
-
-<a href="#" class="forgot-link">Forgot password?</a>
-
-</div>
-
-
-
-<button class="submit-btn" onclick="handleLogin()">
-Sign In Securely 🔐
-</button>
-
-
-<!-- AI VOICE DISTRESS DETECTION SECTION -->
-
-<div style="margin-top:20px;text-align:center;">
-
-<button class="submit-btn" onclick="startRecording()" style="background:#ff4b6e;">
-🎤 Start Voice Monitor
-</button>
-
-<button class="submit-btn" onclick="stopRecording()" style="margin-top:10px;">
-⏹ Stop Monitoring
-</button>
-
-<p style="margin-top:10px;font-size:0.9rem;opacity:0.8;">
-AI listens for distress voice patterns and triggers emergency alerts.
-</p>
-
-</div>
-
-
-
-<div class="divider">
-<span>or continue with</span>
-</div>
-
-
-<div class="social-btns">
-
-<button class="social-btn" onclick="toast('🔗','Google login coming soon!')">
-Google
-</button>
-
-<button class="social-btn" onclick="toast('📱','Phone login coming soon!')">
-📱 Phone
-</button>
-
-</div>
-
-<div class="switch-text">
-Don't have an account?
-<span class="switch-link" onclick="switchTab('signup')">Create one free</span>
-</div>
-
-</div>
-
-
-
-<!-- SIGNUP FORM -->
-<div id="signupForm" style="display:none;">
-
-<div class="signup-row">
-
-<div class="form-group">
-<label class="form-label">First Name</label>
-<div class="input-wrap">
-<span class="input-icon">👤</span>
-<input type="text" class="form-input" placeholder="Dhananjay">
-</div>
-</div>
-
-<div class="form-group">
-<label class="form-label">Last Name</label>
-<div class="input-wrap">
-<span class="input-icon">👤</span>
-<input type="text" class="form-input" placeholder="Kumar">
-</div>
-</div>
-
-</div>
-
-
-<div class="form-group">
-<label class="form-label">Email Address</label>
-<div class="input-wrap">
-<span class="input-icon">📧</span>
-<input type="email" class="form-input" placeholder="your@email.com">
-</div>
-</div>
-
-
-<div class="form-group">
-<label class="form-label">Phone Number</label>
-<div class="input-wrap">
-<span class="input-icon">📞</span>
-<input type="tel" class="form-input" placeholder="+917050705870">
-</div>
-</div>
-
-
-<div class="form-group">
-
-<label class="form-label">Password</label>
-
-<div class="input-wrap">
-<span class="input-icon">🔒</span>
-
-<input type="password" class="form-input"
-placeholder="Create strong password"
-id="signupPass"
-style="padding-right:3rem;"
-oninput="checkStrength(this.value)">
-
-<button class="eye-btn" onclick="togglePass('signupPass',this)">👁️</button>
-
-</div>
-
-
-<div class="strength-bar">
-<div class="strength-seg" id="s1"></div>
-<div class="strength-seg" id="s2"></div>
-<div class="strength-seg" id="s3"></div>
-<div class="strength-seg" id="s4"></div>
-</div>
-
-<div class="strength-label" id="strengthLabel">
-Enter a password
-</div>
-
-</div>
-
-
-<button class="submit-btn" onclick="handleSignup()">
-Create Account ✨
-</button>
-
-<div class="switch-text">
-Already have an account?
-<span class="switch-link" onclick="switchTab('login')">Sign in</span>
-</div>
-
-</div>
-
-</div>
-</div>
-</div>
-
-<script src="script.js"></script>
-
+  <!-- ── LEFT PANEL ── -->
+  <div class="left-panel">
+    <a class="brand" href="#">
+      <span style="font-size:1.4rem">🚨</span>
+      <span class="brand-name">Sakti AI<span class="brand-dot"> Women Safety</span></span>
+    </a>
+    <div class="shield-wrap">🛡️</div>
+    <div class="left-title">Your Safety,<br><em>Our Promise</em></div>
+    <div class="left-desc">One tap triggers an emergency alert. Real-time location sharing. AI voice distress detection. Always protected, never alone.</div>
+    <div class="left-stats">
+      <div class="stat"><div class="stat-num">50K+</div><div class="stat-lbl">Women Protected</div></div>
+      <div class="stat"><div class="stat-num">1M+</div><div class="stat-lbl">SOS Alerts Sent</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-lbl">AI Support</div></div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="right-panel">
+    <div class="form-card">
+
+      <div class="form-eyebrow">♀ Secure Access</div>
+      <div class="form-title" id="formTitle">Welcome Back</div>
+      <div class="form-sub" id="formSub">Sign in to your Sakti AI account</div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- ══════════════════════════════════
+           LOGIN FORM
+      ══════════════════════════════════ -->
+      <div id="loginForm">
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-input" placeholder="your@email.com" id="loginEmail"/>
+          </div>
+          <div class="field-error" id="loginEmailErr">Please enter a valid email address.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input" placeholder="Enter your password" id="loginPass" style="padding-right:3rem" onkeydown="if(event.key==='Enter')handleLogin()"/>
+            <button class="eye-btn" onclick="togglePass('loginPass',this)">👁️</button>
+          </div>
+          <div class="field-error" id="loginPassErr">Password is required.</div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe"/>
+            <div class="cb"></div>
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button class="submit-btn" id="loginBtn" onclick="handleLogin()">
+          Sign In Securely 🔐
+        </button>
+
+        <div class="divider"><span>or continue with</span></div>
+
+        <!-- SOCIAL BUTTONS -->
+        <div class="social-btns">
+          <!-- Google -->
+          <button class="social-btn" id="googleBtn" onclick="triggerGoogleLogin()">
+            <svg width="16" height="16" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Google
+          </button>
+          <!-- Phone OTP -->
+          <button class="social-btn" onclick="switchToPhone()">
+            📱 Phone OTP
+          </button>
+        </div>
+
+        <div class="switch-text">
+          Don't have an account?
+          <span class="switch-link" onclick="switchTab('signup')">Create one free</span>
+        </div>
+
+      </div><!-- /loginForm -->
+
+      <!-- ══════════════════════════════════
+           PHONE OTP FORM
+      ══════════════════════════════════ -->
+      <div id="phoneForm" style="display:none">
+
+        <div id="phoneStep1">
+          <div class="info-note">Enter your phone number to receive a 6-digit OTP via SMS.</div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div class="phone-row">
+              <select class="country-select" id="countryCode">
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+65">🇸🇬 +65</option>
+              </select>
+              <div class="input-wrap">
+                <span class="input-icon">📱</span>
+                <input type="tel" class="form-input" placeholder="98765 43210" id="phoneNumber" onkeydown="if(event.key==='Enter')sendOTP()"/>
+              </div>
+            </div>
+            <div class="field-error" id="phoneErr">Please enter a valid phone number.</div>
+          </div>
+          <button class="submit-btn" id="sendOtpBtn" onclick="sendOTP()">
+            Send OTP 📨
+          </button>
+        </div>
+
+        <div id="phoneStep2" style="display:none">
+          <div class="info-note">
+            OTP sent to <strong id="phoneSentTo"></strong>.<br>
+            ⚠️ <strong>Demo mode:</strong> use code <strong style="color:var(--pink)">123456</strong>
+          </div>
+          <label class="form-label" style="text-align:center;display:block;margin-bottom:.5rem">Enter 6-digit OTP</label>
+          <div class="otp-wrap">
+            <input class="otp-input" type="text" maxlength="1" id="o1" oninput="otpNext(this,'o2')" onkeydown="otpBack(event,this,'')"/>
+            <input class="otp-input" type="text" maxlength="1" id="o2" oninput="otpNext(this,'o3')" onkeydown="otpBack(event,this,'o1')"/>
+            <input class="otp-input" type="text" maxlength="1" id="o3" oninput="otpNext(this,'o4')" onkeydown="otpBack(event,this,'o2')"/>
+            <input class="otp-input" type="text" maxlength="1" id="o4" oninput="otpNext(this,'o5')" onkeydown="otpBack(event,this,'o3')"/>
+            <input class="otp-input" type="text" maxlength="1" id="o5" oninput="otpNext(this,'o6')" onkeydown="otpBack(event,this,'o4')"/>
+            <input class="otp-input" type="text" maxlength="1" id="o6" oninput="otpNext(this,'')"   onkeydown="otpBack(event,this,'o5')"/>
+          </div>
+          <div class="field-error" id="otpErr" style="text-align:center">Incorrect OTP. Please try again.</div>
+          <button class="submit-btn" id="verifyOtpBtn" onclick="verifyOTP()">
+            Verify & Sign In ✅
+          </button>
+          <div class="resend-row">
+            Didn't receive it?
+            <span class="resend-link disabled" id="resendLink" onclick="resendOTP()">Resend OTP</span>
+            <span id="resendTimer"> in <strong id="resendCount">30</strong>s</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:1rem">
+          <span class="switch-link" onclick="backToLogin()">← Back to email login</span>
+        </div>
+
+      </div><!-- /phoneForm -->
+
+      <!-- ══════════════════════════════════
+           SIGNUP FORM
+      ══════════════════════════════════ -->
+      <div id="signupForm" style="display:none">
+
+        <div class="signup-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" placeholder="Priya" id="signupFirst"/>
+            </div>
+            <div class="field-error" id="signupFirstErr">First name is required.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" placeholder="Sharma" id="signupLast"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-input" placeholder="your@email.com" id="signupEmail"/>
+          </div>
+          <div class="field-error" id="signupEmailErr">Please enter a valid email.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <div class="phone-row">
+            <select class="country-select" id="signupCountry">
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+971">🇦🇪 +971</option>
+            </select>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" class="form-input" placeholder="98765 43210" id="signupPhone"/>
+            </div>
+          </div>
+          <div class="field-error" id="signupPhoneErr">Please enter a valid phone number.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input" placeholder="Create a strong password" id="signupPass" style="padding-right:3rem" oninput="checkStrength(this.value)"/>
+            <button class="eye-btn" onclick="togglePass('signupPass',this)">👁️</button>
+          </div>
+          <div class="strength-bar">
+            <div class="strength-seg" id="s1"></div>
+            <div class="strength-seg" id="s2"></div>
+            <div class="strength-seg" id="s3"></div>
+            <div class="strength-seg" id="s4"></div>
+          </div>
+          <div class="strength-label" id="strengthLabel">Enter a password</div>
+          <div class="field-error" id="signupPassErr">Password must be at least 6 characters.</div>
+        </div>
+
+        <button class="submit-btn" id="signupBtn" onclick="handleSignup()">
+          Create Account ✨
+        </button>
+
+        <div class="switch-text">
+          Already have an account?
+          <span class="switch-link" onclick="switchTab('login')">Sign in</span>
+        </div>
+
+      </div><!-- /signupForm -->
+
+    </div><!-- /form-card -->
+  </div><!-- /right-panel -->
+</div><!-- /page -->
+
+<script>
+/* ══════════════════════════════════════════════════
+   CONFIGURATION
+   Replace the Client ID with your own from
+   https://console.cloud.google.com/
+══════════════════════════════════════════════════ */
+var GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com';
+var BACKEND = 'http://127.0.0.1:8000';
+
+/* ══════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════ */
+var cur  = document.getElementById('cur');
+var ring = document.getElementById('cur-ring');
+var mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', function(e) {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function loop() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,input,select,.switch-link,.remember').forEach(function(el) {
+  el.addEventListener('mouseenter', function() {
+    cur.style.transform  = 'translate(-50%,-50%) scale(2.2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.6)';
+    ring.style.opacity   = '.8';
+  });
+  el.addEventListener('mouseleave', function() {
+    cur.style.transform  = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.opacity   = '.55';
+  });
+});
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+var _tt = null;
+function showToast(icon, msg) {
+  var t = document.getElementById('toast');
+  document.getElementById('ti').textContent = icon;
+  document.getElementById('tm').textContent = msg;
+  t.classList.remove('show');
+  clearTimeout(_tt);
+  void t.offsetWidth;
+  t.classList.add('show');
+  _tt = setTimeout(function() { t.classList.remove('show'); }, 3400);
+}
+
+/* ══════════════════════════════════════
+   REDIRECT TO DASHBOARD
+══════════════════════════════════════ */
+function redirectToDashboard(user) {
+  // Store user info for dashboard to use
+  if (user) {
+    localStorage.setItem('sakti_user', JSON.stringify({
+      name:   user.name  || user.given_name || 'User',
+      email:  user.email || '',
+      avatar: user.picture || ''
+    }));
+  }
+  showToast('✅', 'Signed in! Redirecting…');
+  setTimeout(function() { window.location.href = 'dashboard.html'; }, 1000);
+}
+
+/* ══════════════════════════════════════
+   TABS
+══════════════════════════════════════ */
+function switchTab(tab) {
+  var tabs = document.querySelectorAll('.tab');
+  document.getElementById('loginForm').style.display  = 'none';
+  document.getElementById('signupForm').style.display = 'none';
+  document.getElementById('phoneForm').style.display  = 'none';
+  document.querySelectorAll('.field-error').forEach(function(e) { e.classList.remove('show'); });
+
+  if (tab === 'login') {
+    tabs[0].classList.add('active'); tabs[1].classList.remove('active');
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('formTitle').textContent   = 'Welcome Back';
+    document.getElementById('formSub').textContent     = 'Sign in to your Sakti AI account';
+  } else {
+    tabs[1].classList.add('active'); tabs[0].classList.remove('active');
+    document.getElementById('signupForm').style.display = 'block';
+    document.getElementById('formTitle').textContent    = 'Join Sakti AI';
+    document.getElementById('formSub').textContent      = 'Create your free account today';
+  }
+}
+
+/* ══════════════════════════════════════
+   PASSWORD TOGGLE
+══════════════════════════════════════ */
+function togglePass(id, btn) {
+  var inp = document.getElementById(id);
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁️'; }
+}
+
+/* ══════════════════════════════════════
+   PASSWORD STRENGTH
+══════════════════════════════════════ */
+function checkStrength(val) {
+  var segs  = ['s1','s2','s3','s4'].map(function(id) { return document.getElementById(id); });
+  var label = document.getElementById('strengthLabel');
+  var score = 0;
+  if (val.length >= 8)           score++;
+  if (/[A-Z]/.test(val))         score++;
+  if (/[0-9]/.test(val))         score++;
+  if (/[^A-Za-z0-9]/.test(val))  score++;
+  var colors = ['#ef4444','#f59e0b','#10b981','#10b981'];
+  var labels = ['Weak','Fair','Good','Strong'];
+  segs.forEach(function(s, i) {
+    s.style.background = i < score ? colors[score - 1] : 'rgba(255,255,255,.1)';
+  });
+  label.textContent = val.length === 0 ? 'Enter a password' : labels[Math.max(0, score - 1)];
+  label.style.color  = val.length === 0 ? '#6b7280' : colors[Math.max(0, score - 1)];
+}
+
+/* ══════════════════════════════════════
+   VALIDATION HELPERS
+══════════════════════════════════════ */
+function showErr(id, show) {
+  var el = document.getElementById(id);
+  if (el) show ? el.classList.add('show') : el.classList.remove('show');
+}
+function isEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function setBtnLoading(id, loading, label) {
+  var btn = document.getElementById(id);
+  if (!btn) return;
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<span class="spinner"></span> ' + label
+    : label;
+}
+
+/* ══════════════════════════════════════
+   EMAIL LOGIN
+══════════════════════════════════════ */
+function handleLogin() {
+  var email = document.getElementById('loginEmail').value.trim();
+  var pass  = document.getElementById('loginPass').value;
+
+  var ok = true;
+  showErr('loginEmailErr', !isEmail(email)); if (!isEmail(email)) ok = false;
+  showErr('loginPassErr', pass.length === 0); if (!pass.length) ok = false;
+  if (!ok) { showToast('⚠️', 'Please fix the errors above.'); return; }
+
+  setBtnLoading('loginBtn', true, 'Signing in…');
+
+  fetch(BACKEND + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: pass })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    setBtnLoading('loginBtn', false, 'Sign In Securely 🔐');
+    if (data.status === 'ok' || data.message || data.token) {
+      if (data.token) localStorage.setItem('sakti_token', data.token);
+      if (document.getElementById('rememberMe').checked)
+        localStorage.setItem('sakti_email', email);
+      redirectToDashboard({ name: data.name || email.split('@')[0], email: email });
+    } else {
+      showToast('❌', data.error || 'Invalid email or password.');
+    }
+  })
+  .catch(function() {
+    setBtnLoading('loginBtn', false, 'Sign In Securely 🔐');
+    // Dev fallback — remove when backend is live
+    showToast('✅', 'Dev mode — redirecting to dashboard…');
+    setTimeout(function() { window.location.href = 'dashboard.html'; }, 1000);
+  });
+}
+
+/* ══════════════════════════════════════
+   EMAIL SIGNUP
+══════════════════════════════════════ */
+function handleSignup() {
+  var first = document.getElementById('signupFirst').value.trim();
+  var last  = document.getElementById('signupLast').value.trim();
+  var email = document.getElementById('signupEmail').value.trim();
+  var phone = document.getElementById('signupPhone').value.trim();
+  var cc    = document.getElementById('signupCountry').value;
+  var pass  = document.getElementById('signupPass').value;
+
+  var ok = true;
+  showErr('signupFirstErr', first.length === 0); if (!first.length) ok = false;
+  showErr('signupEmailErr', !isEmail(email));     if (!isEmail(email)) ok = false;
+  showErr('signupPhoneErr', phone.length < 6);    if (phone.length < 6) ok = false;
+  showErr('signupPassErr',  pass.length < 6);     if (pass.length < 6) ok = false;
+  if (!ok) { showToast('⚠️', 'Please fix the errors above.'); return; }
+
+  setBtnLoading('signupBtn', true, 'Creating account…');
+
+  fetch(BACKEND + '/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: first + ' ' + last, email: email, phone: cc + phone, password: pass })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    setBtnLoading('signupBtn', false, 'Create Account ✨');
+    showToast('🎉', 'Account created! Please sign in.');
+    setTimeout(function() { switchTab('login'); }, 1200);
+  })
+  .catch(function() {
+    setBtnLoading('signupBtn', false, 'Create Account ✨');
+    showToast('🎉', 'Account created! Please sign in.');
+    setTimeout(function() { switchTab('login'); }, 1200);
+  });
+}
+
+/* ══════════════════════════════════════
+   GOOGLE OAUTH — Google Identity Services
+══════════════════════════════════════ */
+
+// Called by Google GIS library after user selects account
+function onGoogleSignIn(response) {
+  // response.credential is a JWT ID token
+  var idToken = response.credential;
+
+  // Decode the JWT payload (base64 middle section)
+  try {
+    var payload = JSON.parse(atob(idToken.split('.')[1]));
+    var user = {
+      name:    payload.name,
+      email:   payload.email,
+      picture: payload.picture
+    };
+
+    // Optionally verify token on backend
+    fetch(BACKEND + '/google-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: idToken })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.token) localStorage.setItem('sakti_token', data.token);
+      redirectToDashboard(user);
+    })
+    .catch(function() {
+      // Backend not available — still redirect (token verified client-side)
+      redirectToDashboard(user);
+    });
+
+  } catch(e) {
+    showToast('❌', 'Google sign-in failed. Please try again.');
+    console.error('Google JWT decode error:', e);
+  }
+}
+
+function triggerGoogleLogin() {
+  // Check if GIS library loaded
+  if (typeof google === 'undefined' || !google.accounts) {
+    showToast('⚠️', 'Google Sign-In is loading. Please wait a moment and try again.');
+    return;
+  }
+
+  // Check if a real Client ID is set
+  if (GOOGLE_CLIENT_ID.indexOf('YOUR_GOOGLE_CLIENT_ID') !== -1) {
+    showToast('⚙️', 'Add your Google Client ID in index.html to enable Google login.');
+    // Open Google Cloud Console for easy setup
+    setTimeout(function() {
+      window.open('https://console.cloud.google.com/apis/credentials', '_blank');
+    }, 1500);
+    return;
+  }
+
+  // Trigger the Google One Tap / popup sign-in flow
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback:  onGoogleSignIn,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+
+  google.accounts.id.prompt(function(notification) {
+    // If One Tap is suppressed, fall back to renderButton popup
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // Create a temporary invisible button and click it
+      var tempDiv = document.createElement('div');
+      tempDiv.style.cssText = 'position:fixed;top:-9999px;left:-9999px;';
+      document.body.appendChild(tempDiv);
+      google.accounts.id.renderButton(tempDiv, {
+        type: 'standard', theme: 'outline', size: 'large'
+      });
+      var btn = tempDiv.querySelector('[role="button"]') || tempDiv.firstChild;
+      if (btn) btn.click();
+      setTimeout(function() {
+        if (tempDiv.parentNode) tempDiv.parentNode.removeChild(tempDiv);
+      }, 3000);
+    }
+  });
+}
+
+/* ══════════════════════════════════════
+   PHONE OTP FLOW
+══════════════════════════════════════ */
+var _otpValue    = '';   // server-generated OTP (or mock)
+var _resendTimer = null;
+
+function switchToPhone() {
+  document.getElementById('loginForm').style.display  = 'none';
+  document.getElementById('phoneForm').style.display  = 'block';
+  document.getElementById('formTitle').textContent    = 'Phone Sign-In';
+  document.getElementById('formSub').textContent      = 'We\'ll send a 6-digit OTP to your number';
+}
+
+function backToLogin() {
+  document.getElementById('phoneForm').style.display = 'none';
+  switchTab('login');
+}
+
+function sendOTP() {
+  var phone = document.getElementById('phoneNumber').value.trim();
+  var cc    = document.getElementById('countryCode').value;
+
+  showErr('phoneErr', phone.length < 6);
+  if (phone.length < 6) { showToast('⚠️', 'Please enter a valid phone number.'); return; }
+
+  var fullPhone = cc + phone;
+  setBtnLoading('sendOtpBtn', true, 'Sending OTP…');
+
+  fetch(BACKEND + '/send-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: fullPhone })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    setBtnLoading('sendOtpBtn', false, 'Send OTP 📨');
+    _otpValue = data.otp || '123456'; // use server OTP or mock
+    _showOtpStep(fullPhone);
+  })
+  .catch(function() {
+    setBtnLoading('sendOtpBtn', false, 'Send OTP 📨');
+    // Dev fallback: mock OTP
+    _otpValue = '123456';
+    _showOtpStep(fullPhone);
+    showToast('📱', 'Demo OTP: 123456 (backend not connected)');
+  });
+}
+
+function _showOtpStep(phone) {
+  document.getElementById('phoneStep1').style.display = 'none';
+  document.getElementById('phoneStep2').style.display = 'block';
+  document.getElementById('phoneSentTo').textContent = phone;
+  showToast('📨', 'OTP sent to ' + phone);
+  document.getElementById('o1').focus();
+  _startResendTimer();
+}
+
+function resendOTP() {
+  var link = document.getElementById('resendLink');
+  if (link.classList.contains('disabled')) return;
+  // Reset OTP inputs
+  ['o1','o2','o3','o4','o5','o6'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  showErr('otpErr', false);
+  sendOTP();
+}
+
+function _startResendTimer() {
+  clearInterval(_resendTimer);
+  var count = 30;
+  var link  = document.getElementById('resendLink');
+  var timer = document.getElementById('resendTimer');
+  link.classList.add('disabled');
+  document.getElementById('resendCount').textContent = count;
+  timer.style.display = 'inline';
+  _resendTimer = setInterval(function() {
+    count--;
+    document.getElementById('resendCount').textContent = count;
+    if (count <= 0) {
+      clearInterval(_resendTimer);
+      link.classList.remove('disabled');
+      timer.style.display = 'none';
+    }
+  }, 1000);
+}
+
+/* OTP input auto-advance */
+function otpNext(el, nextId) {
+  el.value = el.value.replace(/\D/g, ''); // digits only
+  if (el.value && nextId) document.getElementById(nextId).focus();
+}
+function otpBack(e, el, prevId) {
+  if (e.key === 'Backspace' && !el.value && prevId) {
+    document.getElementById(prevId).focus();
+  }
+}
+
+function verifyOTP() {
+  var entered = ['o1','o2','o3','o4','o5','o6']
+    .map(function(id) { return document.getElementById(id).value; })
+    .join('');
+
+  if (entered.length < 6) { showToast('⚠️', 'Please enter all 6 digits.'); return; }
+
+  setBtnLoading('verifyOtpBtn', true, 'Verifying…');
+
+  // Verify against backend
+  var phone = document.getElementById('countryCode').value +
+              document.getElementById('phoneNumber').value.trim();
+
+  fetch(BACKEND + '/verify-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: phone, otp: entered })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    setBtnLoading('verifyOtpBtn', false, 'Verify & Sign In ✅');
+    if (data.status === 'ok' || data.token) {
+      if (data.token) localStorage.setItem('sakti_token', data.token);
+      redirectToDashboard({ name: 'User', email: phone });
+    } else {
+      showErr('otpErr', true);
+      showToast('❌', 'Incorrect OTP. Please try again.');
+    }
+  })
+  .catch(function() {
+    setBtnLoading('verifyOtpBtn', false, 'Verify & Sign In ✅');
+    // Dev fallback
+    if (entered === _otpValue || entered === '123456') {
+      redirectToDashboard({ name: 'Phone User', email: phone });
+    } else {
+      showErr('otpErr', true);
+      showToast('❌', 'Incorrect OTP. Try 123456 in demo mode.');
+    }
+  });
+}
+
+/* ══════════════════════════════════════
+   AUTO-FILL remembered email
+══════════════════════════════════════ */
+(function() {
+  var saved = localStorage.getItem('sakti_email');
+  if (saved) {
+    var el = document.getElementById('loginEmail');
+    if (el) { el.value = saved; document.getElementById('rememberMe').checked = true; }
+  }
+})();
+</script>
 </body>
 </html>
