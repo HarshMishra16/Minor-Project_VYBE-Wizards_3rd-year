@@ -31,7 +31,7 @@ Named Entity Recognition (NER)
 🧪 Data & Annotation Pipelines
 
 Dataset specifications
-Data augmentation scripts.
+Data augmentation scripts
 🧠 AI Emergency Summary
 
 The system automatically generates a concise emergency report when distress is detected. This report is designed to help emergency responders quickly understand the situation.
