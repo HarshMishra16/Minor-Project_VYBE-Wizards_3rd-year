@@ -12,7 +12,7 @@ The application is designed to provide real-time safety assistance by using AI t
 
 📱 Mobile App(Flutter)
 
-Audio  capture
+Audio capture
 Local inference
 Emergency chat interface
 
