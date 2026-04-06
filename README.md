@@ -16,7 +16,7 @@ Audio  capture
 Local inference
 Emergency chat interface
 
-⚙️ Backend (FastAPI / Flask)
+⚙️ Backend(FastAPI / Flask)
 
 Alert system
 NLP processing
