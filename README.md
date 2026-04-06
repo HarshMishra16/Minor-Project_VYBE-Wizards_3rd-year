@@ -10,7 +10,7 @@ The application is designed to provide real-time safety assistance by using AI t
 
 🔧 Core Components
 
-📱 Mobile App (Flutter)
+📱 Mobile App(Flutter)
 
 Audio capture
 Local inference
