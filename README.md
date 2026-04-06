@@ -1,4 +1,4 @@
-Minor-Project_VYBE-Wizards_3rd-year
+Minor-Project_VYBE-Wizards_3rd-year/
 
 🚨 AI-Powered Women Safety Application
 
