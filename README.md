@@ -8,7 +8,7 @@ This repository contains the specifications, prototypes, and deployment artifact
 
 The application is designed to provide real-time safety assistance by using AI to detect distress signals and automatically trigger emergency responses. It aims to enhance personal safety through intelligent monitoring and fast communication.
 
-🔧 Core Components
+🔧 
 
 📱 Mobile App(Flutter)
 
