@@ -408,8 +408,8 @@ var _monitoring  = false;   // is monitoring active?
 var _micStream   = null;    // active MediaStream
 var _recorder    = null;    // active MediaRecorder instance
 var _audioChunks = [];      // data chunks for current recording
-var _cycleTimer  = null;    // setTimeout handle for next cycle
-var _recording   = false;   /
+var _cycleTimer  = null;   
+var _recording   = false;   
 
 function startMonitoring() {
   // FIX #13 — guard against double-start
