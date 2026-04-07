@@ -402,17 +402,8 @@ function triggerSOS() {
 
 /* ═══════════════════════════════════════════════
    AI VOICE MONITORING
-   ──────────────────────────────────────────────
-   FIXES APPLIED:
-   #1  Single declarations of all vars
-   #3  getUserMedia only called when user clicks start
-   #4  Runaway loop fixed — clearTimeout before cycle
-   #5  Correct MIME type from recorder.mimeType
-   #9  Previous stream closed before opening new one
-   #10 All mic tracks stopped on stopMonitoring
-   #13 Guard: returns immediately if already monitoring
-   #14 Clean cycle chain — no recursive timeouts after stop
-═══════════════════════════════════════════════ */
+   ──────────────────────────────────────────────*/
+  
 var _monitoring  = false;   // is monitoring active?
 var _micStream   = null;    // active MediaStream
 var _recorder    = null;    // active MediaRecorder instance
