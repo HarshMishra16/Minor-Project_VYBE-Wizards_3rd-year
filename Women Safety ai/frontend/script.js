@@ -406,7 +406,7 @@ function triggerSOS() {
   
 var _monitoring  = false;   // is monitoring active?
 var _micStream   = null;    // active MediaStream
-var _recorder    = null;    // active MediaRecorder instance
+var _recorder    = null;    
 var _audioChunks = [];      
 var _cycleTimer  = null;   
 var _recording   = false;   
