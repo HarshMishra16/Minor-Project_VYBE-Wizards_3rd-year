@@ -1,24 +1,3 @@
-/*
-  script.js — Sakti AI  (fixed)
-  ─────────────────────────────────────────────────────────
-  BUG FIXES APPLIED:
-  #1  Removed duplicate `let recorder` and `let audioChunks`
-  #2  Removed duplicate `sendAudioToAI` — one clean version kept
-  #3  Removed top-level getUserMedia call — mic only opened on demand
-  #4  Fixed runaway loop — clearTimeout used, guard flag checked
-  #5  Fixed wrong Blob MIME type — uses recorder.mimeType not 'audio/wav'
-  #6  handleLogin now fetches /login and checks response
-  #7  handleSignup now reads all fields and fetches /signup
-  #8  Removed alert() blocking calls and dead MP3 URL
-  #9  Each startMonitoring call closes previous stream first
-  #10 stopMonitoring now stops all mic tracks properly
-  #11 Removed dead login()/signup() functions (never called)
-  #12 All .catch blocks show visible toast errors
-  #13 Guard added: if already monitoring, start does nothing
-  #14 Recursive setTimeout replaced with clean cycle chain
-  ─────────────────────────────────────────────────────────
-*/
-
 var BACKEND = 'http://127.0.0.1:8000';
 
 /* ═══════════════════════════════════════════════
