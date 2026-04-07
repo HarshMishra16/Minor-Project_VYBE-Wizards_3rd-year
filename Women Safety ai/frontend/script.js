@@ -450,7 +450,7 @@ function stopMonitoring() {
 
   _monitoring = false;
 
-  // FIX #4 — cancel any pending cycle timer
+  
   clearTimeout(_cycleTimer);
   _cycleTimer = null;
 
@@ -462,7 +462,7 @@ function stopMonitoring() {
   _recorder  = null;
   _recording = false;
 
-  // FIX #10 — stop all mic tracks so mic light turns off
+
   _closeStream();
 
   _setMonitorUI(false);
