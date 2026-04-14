@@ -1631,7 +1631,7 @@ DETECTION_CONFIDENCE     = 0.25
 def _update_camera_and_controller(
     weapon_found: bool,
     weapon_label: str,
-    conf_float: float,      # 0.0–1.0  (BUG 9 fix: was conf_pct/100 previously)
+    conf_float: float,      
     lat=None,
     lon=None,
 ):
@@ -1640,14 +1640,14 @@ def _update_camera_and_controller(
     Called once per processed YOLO frame.
     Module-level function — NOT nested inside run_yolo_camera().  (BUG 3 fix)
     """
-    # 1. Update camera_state (read by /camera-status route)
+
     if weapon_found:
         camera_state["weapon_detected"] = True
         camera_state["label"]           = weapon_label
         camera_state["streaming"]       = True
         print(f"🚨 Threat detected: {weapon_label} - Streaming enabled")
 
-        # Cooldown check to prevent spam alerts
+    
         if time.time() - last_alert_time > ALERT_COOLDOWN:
             last_alert_time = time.time()
             threading.Thread(
@@ -1656,7 +1656,6 @@ def _update_camera_and_controller(
                 daemon=True
             ).start()
 
-    # 2. Drive evidence recording state machine
     if EVIDENCE_OK:
         try:
             ctrl = _get_video_controller()
