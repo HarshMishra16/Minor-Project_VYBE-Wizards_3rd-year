@@ -40,8 +40,6 @@ from flask import Flask, request, jsonify, Response
 
 # ════════════════════════════════════════════════════════
 # EVIDENCE SYSTEM — safe optional import
-# BUG 1 FIX: wrapped in try/except with EVIDENCE_OK flag
-# BUG 2 FIX: Flask imported above before this block
 # ════════════════════════════════════════════════════════
 _HERE          = os.path.dirname(os.path.abspath(__file__))
 _EVIDENCE_PATH = os.path.join(_HERE, "evidence_system", "backend")
@@ -125,8 +123,6 @@ BASE_URL           = os.environ.get("BASE_URL", "http://localhost:5000")
 # ════════════════════════════════════════════════════════
 app = Flask(__name__)
 
-# BUG 8 FIX: CORS must be registered BEFORE evidence routes
-# so all routes (including evidence ones) get CORS headers
 CORS(app,
      resources={r"/*": {"origins": "*"}},
      allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
@@ -1115,7 +1111,7 @@ def get_intents():
 
 # ════════════════════════════════════════════════════════
 # STARTUP DIAGNOSTICS
-# BUG 10 FIX: evidence_system status added to table
+
 # ════════════════════════════════════════════════════════
 def print_startup_diagnostics():
     ffmpeg_ok = os.system("ffmpeg -version > /dev/null 2>&1") == 0
@@ -1179,8 +1175,7 @@ if __name__ == "__main__":
 
 # ════════════════════════════════════════════════════════
 # EVIDENCE SYSTEM — safe optional import
-# BUG 1 FIX: wrapped in try/except with EVIDENCE_OK flag
-# BUG 2 FIX: Flask imported above before this block
+
 # ════════════════════════════════════════════════════════
 _HERE          = os.path.dirname(os.path.abspath(__file__))
 _EVIDENCE_PATH = os.path.join(_HERE, "evidence_system", "backend")
